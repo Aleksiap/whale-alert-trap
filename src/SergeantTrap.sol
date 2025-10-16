@@ -9,7 +9,6 @@ contract SergeantTrap is ITrap {
         uint256 transferSize;
         address token;
         uint256 timestamp;
-        string alertType;
     }
 
     uint256 public constant ETH_THRESHOLD = 2 * 10**18;
@@ -19,8 +18,7 @@ contract SergeantTrap is ITrap {
             whale: 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045,
             transferSize: 3 * 10**18,
             token: address(0),
-            timestamp: block.timestamp,
-            alertType: "ETH"
+            timestamp: block.timestamp
         });
         return abi.encode(alert);
     }
@@ -32,8 +30,8 @@ contract SergeantTrap is ITrap {
 
         WhaleAlert memory alert = abi.decode(data[0], (WhaleAlert));
 
-        // Логика для ETH переводов
-        if (keccak256(abi.encodePacked(alert.alertType)) == keccak256(abi.encodePacked("ETH"))) {
+        // Логика для ETH переводов (token = address(0))
+        if (alert.token == address(0)) {
             if (alert.transferSize >= ETH_THRESHOLD) {
                 string memory alertMessage = string(abi.encodePacked(
                     "ETH_WHALE_",
@@ -66,6 +64,7 @@ contract SergeantTrap is ITrap {
         return "ETH_WHALE_0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045_3ETH";
     }
 
+    // Вспомогательные функции для преобразования
     function _addressToString(address _addr) internal pure returns (string memory) {
         bytes32 value = bytes32(uint256(uint160(_addr)));
         bytes memory alphabet = "0123456789abcdef";
@@ -78,7 +77,7 @@ contract SergeantTrap is ITrap {
         }
         return string(str);
     }
-
+    
     function _uintToString(uint256 _value) internal pure returns (string memory) {
         if (_value == 0) return "0";
         uint256 temp = _value;
