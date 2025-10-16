@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.30;
 
-import { ITrap } from "drosera-contracts/interfaces/ITrap.sol";
+import "../lib/drosera-contracts/interfaces/ITrap.sol";
 
 contract SergeantTrap is ITrap {
     struct WhaleAlert {
@@ -25,10 +25,14 @@ contract SergeantTrap is ITrap {
         return abi.encode(alert);
     }
     
-    function shouldRespond(bytes[] calldata data) external pure override returns (bool, bytes memory) {
+    function shouldRespond(
+        bytes[] calldata data
+    ) external pure override returns (bool shouldTrigger, bytes memory responseData) {
         if (data.length == 0) return (false, "");
+        
         WhaleAlert memory alert = abi.decode(data[0], (WhaleAlert));
         
+        // Логика для ETH переводов
         if (keccak256(abi.encodePacked(alert.alertType)) == keccak256(abi.encodePacked("ETH"))) {
             if (alert.transferSize >= ETH_THRESHOLD) {
                 string memory alertMessage = string(abi.encodePacked(
@@ -38,9 +42,11 @@ contract SergeantTrap is ITrap {
                     _uintToString(alert.transferSize / 10**18),
                     "ETH"
                 ));
-                return (true, abi.encode(alertMessage));
+                responseData = abi.encode(alertMessage);
+                return (true, responseData);
             }
         }
+        // Логика для ERC-20 переводов
         else if (alert.transferSize > 10000 * 10**6) {
             string memory alertMessage = string(abi.encodePacked(
                 "WhaleAlert_",
@@ -49,20 +55,25 @@ contract SergeantTrap is ITrap {
                 _uintToString(alert.transferSize / 10**6),
                 "USD"
             ));
-            return (true, abi.encode(alertMessage));
+            responseData = abi.encode(alertMessage);
+            return (true, responseData);
         }
+        
         return (false, "");
     }
     
+    // Тестовая функция для принудительного срабатывания
     function triggerTestAlert() public pure returns (string memory) {
         return "ETH_WHALE_0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045_3ETH";
     }
     
+    // Вспомогательные функции для преобразования
     function _addressToString(address _addr) internal pure returns (string memory) {
         bytes32 value = bytes32(uint256(uint160(_addr)));
         bytes memory alphabet = "0123456789abcdef";
         bytes memory str = new bytes(42);
-        str[0] = '0'; str[1] = 'x';
+        str[0] = '0';
+        str[1] = 'x';
         for (uint i = 0; i < 20; i++) {
             str[2+i*2] = alphabet[uint8(value[i + 12] >> 4)];
             str[3+i*2] = alphabet[uint8(value[i + 12] & 0x0f)];
