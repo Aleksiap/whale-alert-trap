@@ -11,7 +11,6 @@ Advanced smart contract trap that monitors large transfers in both ETH and ERC-2
 
 ## Contracts
 - **SergeantTrap**: `0xa81b7f5d3da9b70b79abb7274f8e73ba9e6a3140`
-- **DiscordTrap**: `0x04416670dF4836D5da579B24B3F642076251393A`
 - **ResponseContract**: `0x25E2CeF36020A736CF8a4D2cAdD2EBE3940F4608`
 
 ## Monitoring
