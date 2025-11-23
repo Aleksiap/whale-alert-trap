@@ -5,7 +5,7 @@ drosera_address = "0x91cB447BaFc6e0EA0F4Fe056F5a9b1F14bb06e5D"
 
 [traps.discord]
 path = "out/DiscordTrap.sol/DiscordTrap.json"
-response_contract = "0x25E2CeF36020A736CF8a4D2cAdD2EBE3940F4608"
+response_contract = "0xC6EFE7E82dda80Bb4A1637296F3F98424Ea9c0Be"  # ResponseContract
 response_function = "respondWithDiscordName(string)"
 cooldown_period_blocks = 32
 min_number_of_operators = 1
@@ -13,11 +13,11 @@ max_number_of_operators = 2
 block_sample_size = 10
 private_trap = true
 whitelist = ["0xF35e16cE233C9bC0A8a4070bDC776E3f9b407b52"]
-address = "0x04416670dF4836D5da579B24B3F642076251393A"
+address = "0x04416670df4836d5da579b24b3f642076251393a"
 
 [traps.sergeant]
 path = "out/SergeantTrap.sol/SergeantTrap.json"
-response_contract = "0x25E2CeF36020A736CF8a4D2cAdD2EBE3940F4608"
+response_contract = "0xC6EFE7E82dda80Bb4A1637296F3F98424Ea9c0Be"
 response_function = "respondWithDiscordName(string)"
 cooldown_period_blocks = 33
 min_number_of_operators = 1

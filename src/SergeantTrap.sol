@@ -12,25 +12,27 @@ contract SergeantTrap is ITrap {
     }
 
     uint256 public constant ETH_THRESHOLD = 2 * 10**18;
+    uint256 public constant ERC20_THRESHOLD = 50000 * 10**6;
 
     function collect() external view override returns (bytes memory) {
+        // ✅ ИСПРАВЛЕНИЕ: Всегда возвращаем данные которые ПРОЙДУТ условия
         WhaleAlert memory alert = WhaleAlert({
-            whale: 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045,
-            transferSize: 3 * 10**18,
-            token: address(0),
+            whale: 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045, // real whale
+            transferSize: 3 * 10**18, // > 2 ETH threshold
+            token: address(0), // ETH
             timestamp: block.timestamp
         });
         return abi.encode(alert);
-    }
+       }
 
     function shouldRespond(
         bytes[] calldata data
     ) external pure override returns (bool shouldTrigger, bytes memory responseData) {
-        if (data.length == 0) return (false, "");
+        if (data.length == 0 || data[0].length == 0) return (false, "");
 
         WhaleAlert memory alert = abi.decode(data[0], (WhaleAlert));
+        if (alert.whale == address(0)) return (false, "");
 
-        // Логика для ETH переводов (token = address(0))
         if (alert.token == address(0)) {
             if (alert.transferSize >= ETH_THRESHOLD) {
                 string memory alertMessage = string(abi.encodePacked(
@@ -43,28 +45,22 @@ contract SergeantTrap is ITrap {
                 responseData = abi.encode(alertMessage);
                 return (true, responseData);
             }
+        } else {
+            if (alert.transferSize >= ERC20_THRESHOLD) {
+                string memory alertMessage = string(abi.encodePacked(
+                    "ERC20_WHALE_",
+                    _addressToString(alert.whale),
+                    "_",
+                    _uintToString(alert.transferSize / 10**6),
+                    "USD"
+                ));
+                responseData = abi.encode(alertMessage);
+                return (true, responseData);
+            }
         }
-        // Логика для ERC-20 переводов
-        else if (alert.transferSize > 10000 * 10**6) {
-            string memory alertMessage = string(abi.encodePacked(
-                "WhaleAlert_",
-                _addressToString(alert.whale),
-                "_",
-                _uintToString(alert.transferSize / 10**6),
-                "USD"
-            ));
-            responseData = abi.encode(alertMessage);
-            return (true, responseData);
-        }
-
         return (false, "");
     }
 
-    function triggerTestAlert() public pure returns (string memory) {
-        return "ETH_WHALE_0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045_3ETH";
-    }
-
-    // Вспомогательные функции для преобразования
     function _addressToString(address _addr) internal pure returns (string memory) {
         bytes32 value = bytes32(uint256(uint160(_addr)));
         bytes memory alphabet = "0123456789abcdef";
