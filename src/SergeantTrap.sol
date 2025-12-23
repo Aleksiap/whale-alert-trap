@@ -19,7 +19,7 @@ contract SergeantTrap is ITrap {
     string public constant VERSION = "1.0.0";
 
     function collect() external view override returns (bytes memory) {
-        // ✅ ИСПРАВЛЕНИЕ: Всегда возвращаем данные которые ПРОЙДУТ условия
+        // Returns sample data for testing threshold logic
         WhaleAlert memory alert = WhaleAlert({
             whale: 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045, // real whale
             transferSize: 3 * 10**18, // > 2 ETH threshold
