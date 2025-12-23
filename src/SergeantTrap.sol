@@ -41,7 +41,7 @@ contract SergeantTrap is ITrap {
         if (alert.token == address(0)) {
             if (alert.transferSize >= ETH_THRESHOLD) {
                 string memory alertMessage = string(abi.encodePacked(
-                    "ETH_WHALE_",
+                    "ETH_WHALE:",
                     _addressToString(alert.whale),
                     "_",
                     _uintToString(alert.transferSize / 10**18),
