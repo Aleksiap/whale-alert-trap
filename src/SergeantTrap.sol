@@ -16,6 +16,8 @@ contract SergeantTrap is ITrap {
     uint256 public constant ETH_THRESHOLD = 2 * 10**18; // 2 ETH in wei
     uint256 public constant ERC20_THRESHOLD = 50000 * 10**6;
 
+    string public constant VERSION = "1.0.0";
+
     function collect() external view override returns (bytes memory) {
         // ✅ ИСПРАВЛЕНИЕ: Всегда возвращаем данные которые ПРОЙДУТ условия
         WhaleAlert memory alert = WhaleAlert({
