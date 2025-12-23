@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.30;
 
+
 import "../lib/drosera-contracts/interfaces/ITrap.sol";
 
 contract SergeantTrap is ITrap {
