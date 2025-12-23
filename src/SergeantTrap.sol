@@ -53,7 +53,7 @@ contract SergeantTrap is ITrap {
         } else {
             if (alert.transferSize >= ERC20_THRESHOLD) {
                 string memory alertMessage = string(abi.encodePacked(
-                    "ERC20_WHALE_",
+                    "TOKEN_WHALE:",
                     _addressToString(alert.whale),
                     "_",
                     _uintToString(alert.transferSize / 10**6),
