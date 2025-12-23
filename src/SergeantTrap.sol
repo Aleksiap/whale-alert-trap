@@ -13,7 +13,7 @@ contract SergeantTrap is ITrap {
         uint256 timestamp;
     }
 
-    uint256 public constant ETH_THRESHOLD = 2 * 10**18;
+    uint256 public constant ETH_THRESHOLD = 2 * 10**18; // 2 ETH in wei
     uint256 public constant ERC20_THRESHOLD = 50000 * 10**6;
 
     function collect() external view override returns (bytes memory) {
