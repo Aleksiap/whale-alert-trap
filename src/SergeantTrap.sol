@@ -35,6 +35,7 @@ contract SergeantTrap is ITrap {
         if (data.length == 0 || data[0].length == 0) return (false, "");
 
         WhaleAlert memory alert = abi.decode(data[0], (WhaleAlert));
+        bool isAboveThreshold = false; // Default value
         if (alert.whale == address(0)) return (false, "");
 
         if (alert.token == address(0)) {
