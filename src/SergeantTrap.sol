@@ -96,4 +96,5 @@ contract SergeantTrap is ITrap {
         }
         return string(buffer);
     }
+    // End of SergeantTrap contract
 }
