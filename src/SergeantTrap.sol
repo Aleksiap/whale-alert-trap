@@ -30,7 +30,7 @@ contract SergeantTrap is ITrap {
        }
 
    
-        function shouldRespond(
+    function shouldRespond(
         bytes[] calldata data
     ) external pure override returns (bool shouldTrigger, bytes memory responseData) {
         if (data.length == 0 || data[0].length == 0) return (false, "");
