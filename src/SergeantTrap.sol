@@ -14,7 +14,7 @@ contract SergeantTrap is ITrap {
     }
 
     uint256 public constant ETH_THRESHOLD = 2 * 10**18; // 2 ETH in wei
-    uint256 public constant ERC20_THRESHOLD = 50000 * 10**6;
+    uint256 public constant ERC20_THRESHOLD = 50000 * 10**6; // 50,000 tokens with 6 decimals
 
     string public constant VERSION = "1.0.1"; // Updated version
 
